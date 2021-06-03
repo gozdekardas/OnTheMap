@@ -27,10 +27,10 @@ class LoginViewController: UIViewController {
         
         if success {
             
-            /*print("user?")
+            print("user?")
             UdacityClient.getUserInfo{ user, error in
                 print(user.user.firstName)
-            }*/
+            }
             performSegue(withIdentifier: "completeLogin", sender: nil)
         } else {
             showLoginFailure(message: "Incorrect Username or Password ")
