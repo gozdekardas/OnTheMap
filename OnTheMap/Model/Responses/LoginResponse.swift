@@ -5,7 +5,6 @@
 //  Created by GOZDE KARDAS on 2.06.2021.
 //
 
-import Foundation
 
 struct LoginResponse: Codable {
     let account: Account

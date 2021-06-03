@@ -19,26 +19,19 @@ class LoginViewController: UIViewController {
     }
 
     @IBAction func logIn(_ sender: Any) {
-     //   UdacityClient.login(username: emailTextField.text ?? "", password: passwordTextField.text ?? "", completion: handleLoginResponse(success:error:))
+        UdacityClient.login(username: emailTextField.text ?? "", password: passwordTextField.text ?? "", completion: handleLoginResponse(success:error:))
+        
     }
     
     func handleLoginResponse(success: Bool, error: Error?) {
         
         if success {
             
-            print("okdir")
-            
-            let VC1 = self.storyboard!.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
-            let navController = UINavigationController(rootViewController: VC1)
-            // Creating a navigation controller with VC1 at the root of the navigation stack.
-            self.present(navController, animated:true, completion: nil)
-            // Instantiating the second view controller
-          
-            
-            
-            
-            
-             
+            /*print("user?")
+            UdacityClient.getUserInfo{ user, error in
+                print(user.user.firstName)
+            }*/
+            performSegue(withIdentifier: "completeLogin", sender: nil)
         } else {
             showLoginFailure(message: "Incorrect Username or Password ")
         }

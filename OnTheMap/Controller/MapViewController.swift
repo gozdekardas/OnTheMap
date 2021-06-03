@@ -24,6 +24,8 @@ class MapViewController: UIViewController , MKMapViewDelegate{
             var annotations = [MKPointAnnotation]()
             let locations = locations.results
             
+            (UIApplication.shared.delegate as! AppDelegate).userLocations.append(contentsOf: locations)
+            
             for dictionary in locations {
                 
                 let lat = CLLocationDegrees(dictionary.latitude)
