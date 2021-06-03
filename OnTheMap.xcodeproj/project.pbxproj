@@ -14,6 +14,7 @@
 		BE90FCBC2667B722008B0B44 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90FCBB2667B722008B0B44 /* Location.swift */; };
 		BE90FCBE2667BD50008B0B44 /* LocationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90FCBD2667BD50008B0B44 /* LocationResult.swift */; };
 		BE90FCC02667DA9B008B0B44 /* customAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90FCBF2667DA9B008B0B44 /* customAnnotationView.swift */; };
+		BE9876AA2669367800563823 /* AddLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9876A92669367800563823 /* AddLocationController.swift */; };
 		BEEA02A826675BE600DC9875 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEA02A726675BE600DC9875 /* AppDelegate.swift */; };
 		BEEA02AA26675BE600DC9875 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEA02A926675BE600DC9875 /* SceneDelegate.swift */; };
 		BEEA02AC26675BE600DC9875 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEA02AB26675BE600DC9875 /* LoginViewController.swift */; };
@@ -35,6 +36,7 @@
 		BE90FCBB2667B722008B0B44 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		BE90FCBD2667BD50008B0B44 /* LocationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResult.swift; sourceTree = "<group>"; };
 		BE90FCBF2667DA9B008B0B44 /* customAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customAnnotationView.swift; sourceTree = "<group>"; };
+		BE9876A92669367800563823 /* AddLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationController.swift; sourceTree = "<group>"; };
 		BEEA02A426675BE600DC9875 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEEA02A726675BE600DC9875 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BEEA02A926675BE600DC9875 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				BE7D9E072668D384005067D5 /* TabBarViewController.swift */,
 				BEEA02C92667A40E00DC9875 /* MapViewController.swift */,
 				BE7D9E092668EE1A005067D5 /* FindLocationController.swift */,
+				BE9876A92669367800563823 /* AddLocationController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 				BE90FCBE2667BD50008B0B44 /* LocationResult.swift in Sources */,
 				BEEA02A826675BE600DC9875 /* AppDelegate.swift in Sources */,
 				BEEA02C226677F2E00DC9875 /* LoginRequest.swift in Sources */,
+				BE9876AA2669367800563823 /* AddLocationController.swift in Sources */,
 				BE7D9E1026690C39005067D5 /* UserDataResponse.swift in Sources */,
 				BEEA02AA26675BE600DC9875 /* SceneDelegate.swift in Sources */,
 				BEEA02CA2667A40E00DC9875 /* MapViewController.swift in Sources */,

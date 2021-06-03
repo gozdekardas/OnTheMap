@@ -11,8 +11,12 @@ import CoreLocation
 
 class FindLocationController: UIViewController , MKMapViewDelegate, CLLocationManagerDelegate{
     @IBOutlet weak var mapView: MKMapView!
+    
     var locationManager:CLLocationManager!
     var currentLocationStr = "Current location"
+    var currentLatitude = 0.0
+    var currentLongitude = 0.0
+    var mediaUrl = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +35,9 @@ class FindLocationController: UIViewController , MKMapViewDelegate, CLLocationMa
         let center = CLLocationCoordinate2D(latitude: mUserLocation.coordinate.latitude, longitude: mUserLocation.coordinate.longitude)
         let mRegion = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
         mapView.setRegion(mRegion, animated: true)
+        
+        currentLatitude = mUserLocation.coordinate.latitude
+        currentLongitude = mUserLocation.coordinate.longitude
         
         // Get user's Current Location and Drop a pin
         let mkAnnotation: MKPointAnnotation = MKPointAnnotation()
@@ -77,8 +84,13 @@ class FindLocationController: UIViewController , MKMapViewDelegate, CLLocationMa
         }
         return currentLocationStr
     }
+    
+    
     @IBAction func finish(_ sender: Any) {
+        UdacityClient.postStudenLocation(longitude: currentLongitude, latitude: currentLatitude, mapString: currentLocationStr, mediaURL: mediaUrl ) { success, error in
+            
+        }
         
-        
+        self.performSegue(withIdentifier: "backToMap", sender: nil)
     }
 }

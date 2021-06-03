@@ -31,6 +31,10 @@ class LoginViewController: UIViewController {
             UdacityClient.getUserInfo{ user, error in
                 print(user.user.firstName)
             }
+            
+            
+            
+            
             performSegue(withIdentifier: "completeLogin", sender: nil)
         } else {
             showLoginFailure(message: "Incorrect Username or Password ")
@@ -41,6 +45,12 @@ class LoginViewController: UIViewController {
         let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         show(alertVC, sender: nil)
+    }
+    @IBAction func signUp(_ sender: Any) {
+        let app = UIApplication.shared
+        let toOpen = "https://auth.udacity.com/sign-up"
+        app.openURL(URL(string: toOpen)!)
+        
     }
 }
 

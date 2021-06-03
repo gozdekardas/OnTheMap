@@ -6,7 +6,7 @@
 //
 
 struct PostLocationResponse: Codable {
-    let createdAt: String
+    let createdAt: Int
     let objectId: String
     
     enum CodingKeys: String, CodingKey {
