@@ -232,6 +232,7 @@
                         <barButtonItem key="backBarButtonItem" title="CANCEL" id="MXb-mT-zoi"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="address" destination="BDS-9C-hU0" id="Xml-2C-lTa"/>
                         <outlet property="mediaUrl" destination="BV6-Uq-7Nf" id="TNe-oA-Rbe"/>
                         <segue destination="MoN-B4-P0v" kind="show" identifier="showLocation" id="7D3-az-D5f"/>
                     </connections>
@@ -245,14 +246,14 @@
             <objects>
                 <viewController id="MoN-B4-P0v" customClass="FindLocationController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nT1-cD-Tbn">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="nY3-q0-2gb">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jXj-rT-qi0">
-                                <rect key="frame" x="70" y="758" width="274" height="28"/>
+                                <rect key="frame" x="70" y="704" width="274" height="28"/>
                                 <color key="backgroundColor" systemColor="systemTealColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="FKD-8w-f1u"/>
@@ -386,6 +387,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="7D3-az-D5f"/>
         <segue reference="a1s-K3-zom"/>
     </inferredMetricsTieBreakers>
     <resources>

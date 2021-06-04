@@ -17,6 +17,7 @@ class FindLocationController: UIViewController , MKMapViewDelegate, CLLocationMa
     var currentLatitude = 0.0
     var currentLongitude = 0.0
     var mediaUrl = ""
+    var address = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,67 +27,55 @@ class FindLocationController: UIViewController , MKMapViewDelegate, CLLocationMa
     }
     
     override func viewDidAppear(_ animated: Bool) {
-            determineCurrentLocation()
+        setUsersClosestLocation()
         print("done")
         }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let mUserLocation:CLLocation = locations[0] as CLLocation
-        let center = CLLocationCoordinate2D(latitude: mUserLocation.coordinate.latitude, longitude: mUserLocation.coordinate.longitude)
-        let mRegion = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-        mapView.setRegion(mRegion, animated: true)
         
-        currentLatitude = mUserLocation.coordinate.latitude
-        currentLongitude = mUserLocation.coordinate.longitude
         
         // Get user's Current Location and Drop a pin
         let mkAnnotation: MKPointAnnotation = MKPointAnnotation()
-        mkAnnotation.coordinate = CLLocationCoordinate2DMake(mUserLocation.coordinate.latitude, mUserLocation.coordinate.longitude)
-        mkAnnotation.title = self.setUsersClosestLocation(mLattitude: mUserLocation.coordinate.latitude, mLongitude: mUserLocation.coordinate.longitude)
+        mkAnnotation.coordinate = CLLocationCoordinate2DMake(currentLatitude, currentLongitude)
+        mkAnnotation.title = currentLocationStr
         mapView.addAnnotation(mkAnnotation)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Error - locationManager: \(error.localizedDescription)")
-    }
     
-    func determineCurrentLocation() {
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestAlwaysAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.startUpdatingLocation()
-        }
     }
     
     
     //MARK:- Intance Methods
     
-    func setUsersClosestLocation(mLattitude: CLLocationDegrees, mLongitude: CLLocationDegrees) -> String {
+    func setUsersClosestLocation()  {
         let geoCoder = CLGeocoder()
-        let location = CLLocation(latitude: mLattitude, longitude: mLongitude)
         
-        geoCoder.reverseGeocodeLocation(location) {
+        geoCoder.geocodeAddressString(address) {
             (placemarks, error) -> Void in
-            
+            print(placemarks)
             if let mPlacemark = placemarks{
+                self.currentLatitude = mPlacemark[0].location?.coordinate.latitude ?? 0.0
+                self.currentLongitude = mPlacemark[0].location?.coordinate.longitude ?? 0.0
                 if let dict = mPlacemark[0].addressDictionary as? [String: Any]{
+                    
                     if let Name = dict["Country"] as? String{
                         if let City = dict["State"] as? String{
                             self.currentLocationStr = Name + ", " + City
                             print(self.currentLocationStr)
                         }
                     }
+                    
+                    print(self.currentLongitude)
                 }
             }
         }
-        return currentLocationStr
     }
     
     
     @IBAction func finish(_ sender: Any) {
+        
         UdacityClient.postStudenLocation(longitude: currentLongitude, latitude: currentLatitude, mapString: currentLocationStr, mediaURL: mediaUrl ) { success, error in
             
         }

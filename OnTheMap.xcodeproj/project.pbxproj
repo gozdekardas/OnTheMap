@@ -15,6 +15,8 @@
 		BE90FCBE2667BD50008B0B44 /* LocationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90FCBD2667BD50008B0B44 /* LocationResult.swift */; };
 		BE90FCC02667DA9B008B0B44 /* customAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90FCBF2667DA9B008B0B44 /* customAnnotationView.swift */; };
 		BE9876AA2669367800563823 /* AddLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9876A92669367800563823 /* AddLocationController.swift */; };
+		BE9876AC2669782A00563823 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9876AB2669782A00563823 /* User.swift */; };
+		BE9876AE266A049500563823 /* StudentLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9876AD266A049500563823 /* StudentLocations.swift */; };
 		BEEA02A826675BE600DC9875 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEA02A726675BE600DC9875 /* AppDelegate.swift */; };
 		BEEA02AA26675BE600DC9875 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEA02A926675BE600DC9875 /* SceneDelegate.swift */; };
 		BEEA02AC26675BE600DC9875 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEA02AB26675BE600DC9875 /* LoginViewController.swift */; };
@@ -37,6 +39,8 @@
 		BE90FCBD2667BD50008B0B44 /* LocationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResult.swift; sourceTree = "<group>"; };
 		BE90FCBF2667DA9B008B0B44 /* customAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customAnnotationView.swift; sourceTree = "<group>"; };
 		BE9876A92669367800563823 /* AddLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationController.swift; sourceTree = "<group>"; };
+		BE9876AB2669782A00563823 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		BE9876AD266A049500563823 /* StudentLocations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocations.swift; sourceTree = "<group>"; };
 		BEEA02A426675BE600DC9875 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEEA02A726675BE600DC9875 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BEEA02A926675BE600DC9875 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +74,7 @@
 				BEEA02C3266787EC00DC9875 /* LoginResponse.swift */,
 				BE7D9E0B2669083B005067D5 /* PostLocationResponse.swift */,
 				BE7D9E0F26690C39005067D5 /* UserDataResponse.swift */,
+				BE9876AB2669782A00563823 /* User.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 				BE7D9E0E26690853005067D5 /* Requests */,
 				BE7D9E0D26690840005067D5 /* Responses */,
 				BE90FCBB2667B722008B0B44 /* Location.swift */,
+				BE9876AD266A049500563823 /* StudentLocations.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -226,11 +232,13 @@
 			files = (
 				BEEA02C026676F7900DC9875 /* UdacityClient.swift in Sources */,
 				BEEA02AC26675BE600DC9875 /* LoginViewController.swift in Sources */,
+				BE9876AE266A049500563823 /* StudentLocations.swift in Sources */,
 				BEEA02C4266787ED00DC9875 /* LoginResponse.swift in Sources */,
 				BE90FCC02667DA9B008B0B44 /* customAnnotationView.swift in Sources */,
 				BE7D9E082668D384005067D5 /* TabBarViewController.swift in Sources */,
 				BEEA02CC2667A41B00DC9875 /* TableViewController.swift in Sources */,
 				BE7D9E0A2668EE1A005067D5 /* FindLocationController.swift in Sources */,
+				BE9876AC2669782A00563823 /* User.swift in Sources */,
 				BE7D9E0C2669083B005067D5 /* PostLocationResponse.swift in Sources */,
 				BE90FCBC2667B722008B0B44 /* Location.swift in Sources */,
 				BE90FCBE2667BD50008B0B44 /* LocationResult.swift in Sources */,

@@ -18,36 +18,36 @@ class UdacityClient{
     
     
     //MARK: Endpoints
-        enum EndPoints {
-            
-            static let base = "https://onthemap-api.udacity.com/v1"
-            
-            case login
-            case addLocation
-            case getLocations
-            case getUserInfo
-            
-            
-            
-            var stringValue: String {
-                switch self {
-                case .login:
-                    return EndPoints.base + "/session"
-                case .addLocation:
-                    return  EndPoints.base + "/StudentLocation"
-                case .getLocations:
-                    return EndPoints.base + "/StudentLocation?order=-createdAt?limit=100"
-                case .getUserInfo:
-                    return EndPoints.base + "/users/\(Auth.accountKey)"
-                }
-            }
-            
-            var url: URL {
-                return URL(string: stringValue)!
+    enum EndPoints {
+        
+        static let base = "https://onthemap-api.udacity.com/v1"
+        
+        case login
+        case addLocation
+        case getLocations
+        case getUserInfo
+        
+        
+        
+        var stringValue: String {
+            switch self {
+            case .login:
+                return EndPoints.base + "/session"
+            case .addLocation:
+                return  EndPoints.base + "/StudentLocation"
+            case .getLocations:
+                return EndPoints.base + "/StudentLocation?limit=5&order=-updatedAt"
+            case .getUserInfo:
+                return EndPoints.base + "/users/\(Auth.accountKey)"
             }
         }
+        
+        var url: URL {
+            return URL(string: stringValue)!
+        }
+    }
     
-    class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
+    class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(removeFirstChars: Bool,url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -56,11 +56,18 @@ class UdacityClient{
         request.httpBody = try! JSONEncoder().encode(body)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error…
+            if error != nil { 
+                completion(nil, error)
                 return
             }
-            let range = 5..<data!.count
-            let newData = data?.subdata(in: range) /* subset response data! */
+            
+            var newData = data
+            
+            if removeFirstChars {
+                let range = (5..<data!.count)
+                newData = data?.subdata(in: range)
+                
+            }
             print(String(data: newData!, encoding: .utf8)!)
             
             guard let newData = newData else {
@@ -87,7 +94,37 @@ class UdacityClient{
         task.resume()
     }
     
-    class func taskForGETRequestcompletion<ResponseType: Decodable>( url: URL,responseType: ResponseType.Type,completion:@escaping (ResponseType?, Error?) -> Void) {
+    class func taskForDELETERequest(url: URL, completion: @escaping (Bool?, Error?) -> Void) {
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+        for cookie in sharedCookieStorage.cookies! {
+          if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+          request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+          if error != nil { // Handle error…
+              return
+          }
+          
+          print(String(data: data!, encoding: .utf8)!)
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+                return
+            }
+            completion(true, nil)
+        }
+        task.resume()
+    }
+    
+    class func taskForGETRequestcompletion<ResponseType: Decodable>( removeFirstChars: Bool, url: URL,responseType: ResponseType.Type,completion:@escaping (ResponseType?, Error?) -> Void) {
         
         let request = URLRequest(url: url)
         let session = URLSession.shared
@@ -95,9 +132,18 @@ class UdacityClient{
             if error != nil { // Handle error...
                 return
             }
-            print(String(data: data!, encoding: .utf8)!)
             
-            guard let data = data else {
+            var newData = data
+            
+            if removeFirstChars {
+                let range = (5..<data!.count)
+                newData = data?.subdata(in: range)
+                
+            }
+            
+            print(String(data: newData!, encoding: .utf8)!)
+            
+            guard let newData = newData else {
                 DispatchQueue.main.async {
                     completion(nil, error)
                 }
@@ -105,7 +151,7 @@ class UdacityClient{
             }
             let decoder = JSONDecoder()
             do {
-                let responseObject = try decoder.decode(ResponseType.self, from: data)
+                let responseObject = try decoder.decode(ResponseType.self, from: newData)
                 DispatchQueue.main.async {
                     completion(responseObject, nil)
                 }
@@ -119,32 +165,52 @@ class UdacityClient{
         task.resume()
     }
     
+    class func getUserInfo( completion: @escaping (User, Error?) -> Void) {
+        
+        taskForGETRequestcompletion(removeFirstChars: true, url: EndPoints.getUserInfo.url, responseType: User.self) { response, error in
+            if let response = response {
+                Auth.firstName = response.firstName
+                Auth.lastName = response.lastName
+                completion(response, nil)
+            }else
+            {print(error as Any)}
+            
+        }
+        
+    }
+    
     class func login(username: String, password: String, completion: @escaping (Bool, Error?) -> Void) {
         
         let body = LoginRequest(udacity: Udacity(username: username, password: password))
-        taskForPOSTRequest(url: EndPoints.login.url, responseType: LoginResponse.self ,body: body) { response, error in
+        taskForPOSTRequest(removeFirstChars: true, url: EndPoints.login.url, responseType: LoginResponse.self ,body: body) { response, error in
             if let response = response {
-                print(response)
                 Auth.accountKey = response.account.key
-                print("account_key")
-                print(Auth.accountKey )
                 completion(true, nil)
             } else {
-                print("false")
+                completion(false, error)
+            }
+        }
+    }
+    
+    class func logout(completion: @escaping (Bool, Error?) -> Void) {
+        
+        
+        taskForDELETERequest(url: EndPoints.login.url){ response, error in
+            if let response = response {
+                completion(true, nil)
+            } else {
                 completion(false, error)
             }
         }
     }
     
     
-    class func getLocations( completion: @escaping (LocationResult, Error?) -> Void) {
-        print("holaa")
+    class func getLocations(  completion: @escaping ([Location], Error?) -> Void) {
         
-        taskForGETRequestcompletion(url: EndPoints.getLocations.url, responseType: LocationResult.self) { response, error in
+        taskForGETRequestcompletion(removeFirstChars: false, url: EndPoints.getLocations.url, responseType: LocationResult.self) { response, error in
             if let response = response {
-                // print(response)
-                print("true")
-                completion(response, nil)
+                
+                completion(response.results, nil)
             }else
             {print(error as Any)}
             
@@ -152,55 +218,15 @@ class UdacityClient{
     }
     
     class func postStudenLocation(longitude: Double, latitude: Double, mapString: String, mediaURL: String,completion: @escaping (Bool, Error?) -> Void){
-     
+        
         let body = Location(firstName: Auth.firstName, lastName: Auth.lastName, longitude: longitude, latitude: latitude, mapString: mapString, mediaURL: mediaURL, uniqueKey: Auth.accountKey)
         
-        var request = URLRequest(url: EndPoints.addLocation.url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try! JSONEncoder().encode(body)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-          if error != nil { // Handle error…
-              return
-          }
-          print(String(data: data!, encoding: .utf8)!)
-        }
-        task.resume()
-        
-        
-        
-        
-    }
-    
-    class func getUserInfo( completion: @escaping (UserDataResponse, Error?) -> Void) {
-        
-        let request = URLRequest(url: EndPoints.getUserInfo.url)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-          if error != nil { // Handle error...
-              return
-          }
-          let range = (5..<data!.count)
-          let newData = data?.subdata(in: range) /* subset response data! */
-          print(String(data: newData!, encoding: .utf8)!)
-            
-            guard let newData = newData else {
-                return
-            }
-            let decoder = JSONDecoder()
-            do {
-                let responseObject = try decoder.decode(UserDataResponse.self, from: newData)
-                Auth.firstName = responseObject.user.firstName
-                Auth.lastName = responseObject.user.lastName
-            } catch {
-                DispatchQueue.main.async {
-                    print(error)
-                }
+        taskForPOSTRequest(removeFirstChars: false, url: EndPoints.addLocation.url, responseType: PostLocationResponse.self ,body: body) { response, error in
+            if let response = response {
+                completion(true, nil)
+            } else {
+                completion(false, error)
             }
         }
-        task.resume()
     }
-    
-    
 }

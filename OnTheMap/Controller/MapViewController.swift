@@ -20,11 +20,9 @@ class MapViewController: UIViewController , MKMapViewDelegate{
 
         
         UdacityClient.getLocations() { locations, error in
+            StudentsLocations.data = locations
             
             var annotations = [MKPointAnnotation]()
-            let locations = locations.results
-            
-            (UIApplication.shared.delegate as! AppDelegate).userLocations.append(contentsOf: locations)
             
             for dictionary in locations {
                 

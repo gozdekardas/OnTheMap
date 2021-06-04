@@ -9,13 +9,7 @@ import UIKit
 
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
-    var userLocations: [Location]!{
-        let object = UIApplication.shared.delegate
-        let appDelegate = object as! AppDelegate
-        return appDelegate.userLocations
-    }
-    
+        
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         
@@ -32,13 +26,13 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userLocations.count
+        return StudentsLocations.data.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "LocationTableCell")!
-        let loc = self.userLocations[(indexPath as NSIndexPath).row]
+        let loc = StudentsLocations.data[(indexPath as NSIndexPath).row]
         
         cell.textLabel?.text = "\(loc.firstName) \(loc.lastName)"
         cell.detailTextLabel?.text = "\(loc.mediaURL)"
@@ -47,8 +41,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let loc = self.userLocations[(indexPath as NSIndexPath).row]
-        UIApplication.shared.openURL(URL(string: loc.mediaURL)!)
+        let loc = StudentsLocations.data[(indexPath as NSIndexPath).row]
+        try UIApplication.shared.openURL(URL(string: loc.mediaURL)!)
         
     }
     
