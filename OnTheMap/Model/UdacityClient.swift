@@ -36,7 +36,7 @@ class UdacityClient{
             case .addLocation:
                 return  EndPoints.base + "/StudentLocation"
             case .getLocations:
-                return EndPoints.base + "/StudentLocation?limit=5&order=-updatedAt"
+                return EndPoints.base + "/StudentLocation?limit=100&order=-updatedAt"
             case .getUserInfo:
                 return EndPoints.base + "/users/\(Auth.accountKey)"
             }

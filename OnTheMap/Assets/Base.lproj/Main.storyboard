@@ -246,14 +246,14 @@
             <objects>
                 <viewController id="MoN-B4-P0v" customClass="FindLocationController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nT1-cD-Tbn">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="nY3-q0-2gb">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jXj-rT-qi0">
-                                <rect key="frame" x="70" y="704" width="274" height="28"/>
+                                <rect key="frame" x="70" y="758" width="274" height="28"/>
                                 <color key="backgroundColor" systemColor="systemTealColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="FKD-8w-f1u"/>
@@ -266,6 +266,10 @@
                                     <action selector="finish:" destination="MoN-B4-P0v" eventType="touchUpInside" id="Mce-uh-wib"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Pgp-zp-MsW">
+                                <rect key="frame" x="197" y="331" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="plU-ta-9q9"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -282,6 +286,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Add Location" id="P0D-RY-trP"/>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="Pgp-zp-MsW" id="75l-Xp-wlJ"/>
                         <outlet property="mapView" destination="nY3-q0-2gb" id="X38-0a-1vu"/>
                         <segue destination="amF-eB-jyH" kind="presentation" identifier="backToMap" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="a1s-K3-zom"/>
                     </connections>
@@ -387,7 +392,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="7D3-az-D5f"/>
         <segue reference="a1s-K3-zom"/>
     </inferredMetricsTieBreakers>
     <resources>

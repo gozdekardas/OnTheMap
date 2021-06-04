@@ -11,6 +11,7 @@ import CoreLocation
 
 class FindLocationController: UIViewController , MKMapViewDelegate, CLLocationManagerDelegate{
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
     var locationManager:CLLocationManager!
     var currentLocationStr = "Current location"
@@ -24,32 +25,50 @@ class FindLocationController: UIViewController , MKMapViewDelegate, CLLocationMa
         mapView.delegate = self
         mapView.register(customAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         
+        //Hide activity indicatory when stops
+        activityIndicatorView.hidesWhenStopped = true
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setUsersClosestLocation()
-        print("done")
+        super.viewDidAppear(true)
+        activityIndicatorView.startAnimating()
+        setUsersClosestLocation{ response, error in
+            if  response {
+                
+                var annotations = [MKPointAnnotation]()
+                let coordinate = CLLocationCoordinate2D(latitude: self.currentLatitude, longitude: self.currentLongitude)
+                
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = coordinate
+                annotation.title = self.currentLocationStr
+                
+                annotations.append(annotation)
+                
+                self.mapView.addAnnotations(annotations)
+                self.centerMapOnLocation(CLLocation(latitude: self.currentLatitude, longitude: self.currentLongitude), mapView: self.mapView)
+                self.activityIndicatorView.stopAnimating()
+            }else{
+                self.showLoginFailure(message: "Error when getting location")
+            }
         }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         
-        // Get user's Current Location and Drop a pin
-        let mkAnnotation: MKPointAnnotation = MKPointAnnotation()
-        mkAnnotation.coordinate = CLLocationCoordinate2DMake(currentLatitude, currentLongitude)
-        mkAnnotation.title = currentLocationStr
-        mapView.addAnnotation(mkAnnotation)
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Error - locationManager: \(error.localizedDescription)")
-    
+    func centerMapOnLocation(_ location: CLLocation, mapView: MKMapView) {
+        let regionRadius: CLLocationDistance = 5000
+        let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
+                                                  latitudinalMeters: regionRadius * 2.0, longitudinalMeters: regionRadius * 2.0)
+        mapView.setRegion(coordinateRegion, animated: true)
     }
+    
+    
     
     
     //MARK:- Intance Methods
     
-    func setUsersClosestLocation()  {
+    func setUsersClosestLocation(completion: @escaping (Bool, Error?) -> Void)  {
         let geoCoder = CLGeocoder()
         
         geoCoder.geocodeAddressString(address) {
@@ -69,6 +88,13 @@ class FindLocationController: UIViewController , MKMapViewDelegate, CLLocationMa
                     
                     print(self.currentLongitude)
                 }
+                DispatchQueue.main.async {
+                    completion(true, nil)
+                }
+            }else{
+                DispatchQueue.main.async {
+                    completion(false, error)
+                }
             }
         }
     }
@@ -77,9 +103,31 @@ class FindLocationController: UIViewController , MKMapViewDelegate, CLLocationMa
     @IBAction func finish(_ sender: Any) {
         
         UdacityClient.postStudenLocation(longitude: currentLongitude, latitude: currentLatitude, mapString: currentLocationStr, mediaURL: mediaUrl ) { success, error in
-            
+            if success {
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "backtoLogin", sender: nil)
+                    // self.dismiss(animated: true, completion: nil)
+                }
+            }else{
+                self.showLoginFailure(message: "Error when posting location" )
+            }
         }
         
-        self.performSegue(withIdentifier: "backToMap", sender: nil)
+        
+    }
+    
+    func showLoginFailure(message: String) {
+        let alertVC = UIAlertController(title: "Failed", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            
+            if let nav = self.navigationController {
+                nav.popViewController(animated: true)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }))
+        present(alertVC, animated: true)
+        
+        
     }
 }
